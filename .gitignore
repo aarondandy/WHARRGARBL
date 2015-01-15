@@ -1,0 +1,15 @@
+bin
+obj
+
+*.suo
+*.user
+*.userprefs
+*.ncrunch*
+
+artifacts
+packages
+node_modules
+
+*.sln.ide
+
+/*.nupkg
