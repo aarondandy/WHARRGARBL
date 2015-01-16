@@ -5,6 +5,7 @@ obj
 *.user
 *.userprefs
 *.ncrunch*
+*.crunchsolution.cache
 
 artifacts
 packages
@@ -13,3 +14,4 @@ node_modules
 *.sln.ide
 
 /*.nupkg
+StyleCop.Cache
