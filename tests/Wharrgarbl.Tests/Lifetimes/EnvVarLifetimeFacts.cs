@@ -31,12 +31,11 @@
         {
             using (var outerLifetime = EnvVarLifetime.Set("TEST_VAR", "outer"))
             {
-                Action innerLifetime = () =>
+                new Action(() =>
                 {
                     EnvVarLifetime.Set("TEST_VAR", "inner");
                     Environment.GetEnvironmentVariable("TEST_VAR").Should().Be("inner");
-                };
-                innerLifetime(); // wrapping it inside an action and invoking should allow collection
+                })(); // wrapping it inside an action and invoking should allow collection
 
                 GC.Collect();
                 GC.WaitForPendingFinalizers();

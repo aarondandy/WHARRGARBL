@@ -33,8 +33,7 @@
 
         public static IEnumerable<string> WhereHasText(this IEnumerable<string> values)
         {
-            return values.Where(value => !String.IsNullOrEmpty(value)); // TODO: replace with WhereNot
+            return values.Where(value => !string.IsNullOrEmpty(value)); // TODO: replace with WhereNot
         }
-
     }
 }

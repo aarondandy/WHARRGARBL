@@ -58,6 +58,7 @@
             Restore();
         }
 
+        [ContractInvariantMethod]
         private void ObjectInvariants()
         {
             Contract.Invariant(Variable != null);

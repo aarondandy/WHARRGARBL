@@ -9,7 +9,7 @@
     using Wharrgarbl.CoreExtensions;
     using Xunit;
 
-    public static class StringExtensionTests
+    public static class StringExtensionFacts
     {
         [Fact]
         public static void join_string_array()
@@ -42,7 +42,7 @@
         [Fact]
         public static void filter_out_null_and_empty()
         {
-            var items = new[] { "1", null, "2", String.Empty, "3" };
+            var items = new[] { "1", null, "2", string.Empty, "3" };
             
             var result = items.WhereHasText();
 
