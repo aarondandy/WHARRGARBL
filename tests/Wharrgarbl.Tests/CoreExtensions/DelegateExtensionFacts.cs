@@ -7,8 +7,9 @@
     using System.Threading.Tasks;
     using FluentAssertions;
     using Wharrgarbl.CoreExtensions;
+    using Wharrgarbl.Functions;
     using Xunit;
-
+  
     public static class DelegateExtensionFacts
     {
         [Fact]
@@ -16,7 +17,7 @@
         {
             var numbers = Enumerable.Range(0, 10);
             var pred = new Predicate<int>(x => x % 2 == 0).AsFunc();
-            var func = new Func<int, bool>(x => x % 2 == 0);
+            var func = Fn.fun((int x) => x % 2 == 0);
 
             var predNumbers = numbers.Where(pred);
             var funcNumbers = numbers.Where(func);
@@ -29,7 +30,7 @@
         {
             var numbers = Enumerable.Range(0, 10);
             var pred = new Predicate<int>(x => x % 2 == 0);
-            var func = new Func<int, bool>(x => x % 2 == 0).AsPredicate();
+            var func = Fn.fun((int x) => x % 2 == 0).AsPredicate();
 
             var predNumbers = numbers.Where(pred);
             var funcNumbers = numbers.Where(func);
@@ -41,7 +42,7 @@
         public static void func_negated_check()
         {
             var numbers = Enumerable.Range(0, 6);
-            var even = new Func<int, bool>(x => x % 2 == 0);
+            var even = Fn.fun((int x) => x % 2 == 0);
             var odd = even.Negated();
 
             var oddNumbers = numbers.Where(odd);

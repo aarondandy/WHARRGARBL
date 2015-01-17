@@ -49,6 +49,7 @@
     <Compile Include="CoreExtensions\DelegateEx.cs" />
     <Compile Include="CoreExtensions\EnumerableEx.cs" />
     <Compile Include="CoreExtensions\StringEx.cs" />
+    <Compile Include="Functions\Fn.cs" />
     <Compile Include="Lifetimes\EnvVarLifetime.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Functions\EnvFn.cs" />
