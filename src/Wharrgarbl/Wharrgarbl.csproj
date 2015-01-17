@@ -46,6 +46,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CoreExtensions\DelegateEx.cs" />
+    <Compile Include="CoreExtensions\EnumerableEx.cs" />
     <Compile Include="CoreExtensions\StringEx.cs" />
     <Compile Include="Lifetimes\EnvVarLifetime.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

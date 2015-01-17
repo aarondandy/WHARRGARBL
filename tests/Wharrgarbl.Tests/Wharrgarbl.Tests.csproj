@@ -49,6 +49,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CoreExtensions\DelegateExtensionFacts.cs" />
+    <Compile Include="CoreExtensions\EnumerableExtensionFacts.cs" />
     <Compile Include="CoreExtensions\StringExtensionFacts.cs" />
     <Compile Include="Lifetimes\EnvVarLifetimeFacts.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
