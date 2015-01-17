@@ -19,6 +19,7 @@
             Target = target;
         }
 
+        /// <inheritdoc/>
         ~EnvVarLifetime()
         {
             Restore();
@@ -40,11 +41,7 @@
 
         public static EnvVarLifetime Set(string variable, string newValue, EnvironmentVariableTarget target)
         {
-            if (string.IsNullOrEmpty(variable))
-            {
-                throw new ArgumentNullException("variable");
-            }
-
+            if (string.IsNullOrEmpty(variable)) throw new ArgumentNullException("variable");
             Contract.Ensures(Contract.Result<EnvVarLifetime>() != null);
 
             var originalValue = Environment.GetEnvironmentVariable(variable, target);

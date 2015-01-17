@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics.Contracts;
     using System.Linq;
     using System.Text;
     using System.Threading.Tasks;
@@ -20,16 +21,22 @@
 
         public static Func<T, bool> Negated<T>(this Func<T, bool> predicate)
         {
+            if (predicate == null) throw new ArgumentNullException("predicate");
+            Contract.Ensures(Contract.Result<Func<T, bool>>() != null);
             return x => !predicate(x);
         }
 
         public static Predicate<T> Negated<T>(this Predicate<T> predicate)
         {
+            if (predicate == null) throw new ArgumentNullException("predicate");
+            Contract.Ensures(Contract.Result<Predicate<T>>() != null);
             return x => !predicate(x);
         }
 
         public static Func<T, bool> NegatedFunc<T>(this Predicate<T> predicate)
         {
+            if (predicate == null) throw new ArgumentNullException("predicate");
+            Contract.Ensures(Contract.Result<Func<T, bool>>() != null);
             return x => !predicate(x);
         }
     }

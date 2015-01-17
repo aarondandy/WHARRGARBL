@@ -14,52 +14,32 @@
     {
         public static IEnumerable<T> Where<T>(this IEnumerable<T> values, Predicate<T> predicate)
         {
-            if (predicate == null)
-            {
-                throw new ArgumentNullException("predicate");
-            }
-
-            Contract.EndContractBlock();
+            if (predicate == null) throw new ArgumentNullException("predicate");
+            Contract.Ensures(Contract.Result<IEnumerable<T>>() != null);
 
             return values.Where(predicate.AsFunc());
         }
 
         public static IEnumerable<T> WhereNot<T>(this IEnumerable<T> values, Func<T, bool> predicate)
         {
-            if (predicate == null)
-            {
-                throw new ArgumentNullException("predicate");
-            }
-
-            Contract.EndContractBlock();
+            if (predicate == null) throw new ArgumentNullException("predicate");
+            Contract.Ensures(Contract.Result<IEnumerable<T>>() != null);
 
             return values.Where(predicate.Negated());
         }
 
         public static IEnumerable<T> WhereNot<T>(this IEnumerable<T> values, Predicate<T> predicate)
         {
-            if (predicate == null)
-            {
-                throw new ArgumentNullException("predicate");
-            }
-
-            Contract.EndContractBlock();
+            if (predicate == null) throw new ArgumentNullException("predicate");
+            Contract.Ensures(Contract.Result<IEnumerable<T>>() != null);
 
             return values.Where(predicate.NegatedFunc());
         }
 
         public static void ForEach<T>(this IEnumerable<T> values, Action<T> action)
         {
-            if (values == null)
-            {
-                throw new ArgumentNullException("values");
-            }
-
-            if (action == null)
-            {
-                throw new ArgumentNullException("action");
-            }
-
+            if (values == null) throw new ArgumentNullException("values");
+            if (action == null) throw new ArgumentNullException("action");
             Contract.EndContractBlock();
 
             foreach (var value in values)
