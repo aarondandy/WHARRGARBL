@@ -58,5 +58,22 @@
 
             predicateNumbers.Should().BeEquivalentTo(funcNumbers);
         }
+
+        [Fact]
+        public static void single_append_adds_to_existing()
+        {
+            var data = new[] { 1, 2, 3 };
+
+            var result = data.Concat(4);
+
+            result.ShouldAllBeEquivalentTo(new[] { 1, 2, 3, 4 });
+        }
+
+        public static void single_append_adds_to_empty()
+        {
+            var result = Enumerable.Empty<int>().Concat(1);
+
+            result.ShouldAllBeEquivalentTo(new[] { 1 });
+        }
     }
 }

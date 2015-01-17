@@ -67,5 +67,19 @@
                 action(value);
             }
         }
+
+        public static IEnumerable<T> Concat<T>(this IEnumerable<T> values, T value)
+        {
+            if (values == null) throw new ArgumentNullException("values");
+            Contract.Ensures(Contract.Result<IEnumerable<T>>() != null);
+
+            return SingleConcatIterator(values, value);
+        }
+
+        private static IEnumerable<T> SingleConcatIterator<T>(IEnumerable<T> values, T appendValue)
+        {
+            foreach (var value in values) yield return value;
+            yield return appendValue;
+        }
     }
 }
