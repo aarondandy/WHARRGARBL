@@ -49,6 +49,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CoreExtensions\StringExtensionTests.cs" />
     <Compile Include="Lifetimes\EnvVarLifetimeFacts.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Functions\EnvironmentFunctionsFacts.cs" />

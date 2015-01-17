@@ -46,6 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CoreExtensions\StringEx.cs" />
     <Compile Include="Lifetimes\EnvVarLifetime.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Functions\EnvFn.cs" />
