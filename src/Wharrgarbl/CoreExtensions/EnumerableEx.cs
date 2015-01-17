@@ -56,6 +56,27 @@
             return SingleConcatIterator(values, value);
         }
 
+        public static IEnumerable<T> ConcatIf<T>(this IEnumerable<T> firstSet, IEnumerable<T> secondSet, bool condition)
+        {
+            if (firstSet == null) throw new ArgumentNullException("firstSet");
+            if (condition && secondSet == null) throw new ArgumentException("secondSet must not be null if condition is true", "secondSet");
+            Contract.Ensures(Contract.Result<IEnumerable<T>>() != null);
+
+            return condition
+                ? firstSet.Concat(secondSet)
+                : firstSet;
+        }
+
+        public static IEnumerable<T> ConcatIf<T>(this IEnumerable<T> values, T value, bool condition)
+        {
+            if (values == null) throw new ArgumentNullException("firstSet");
+            Contract.Ensures(Contract.Result<IEnumerable<T>>() != null);
+
+            return condition
+                ? values.Concat(value)
+                : values;
+        }
+
         private static IEnumerable<T> SingleConcatIterator<T>(IEnumerable<T> values, T appendValue)
         {
             foreach (var value in values) yield return value;

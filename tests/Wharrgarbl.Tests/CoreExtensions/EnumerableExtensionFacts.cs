@@ -80,12 +80,37 @@
         [Fact]
         public static void for_each_iterates_all_items()
         {
-            var input = new[] { 1,2,3};
+            var input = new[] { 1, 2, 3 };
             var output = new List<int>();
 
             input.ForEach(output.Add);
 
             output.ShouldAllBeEquivalentTo(input);
+        }
+
+        [Fact]
+        public static void concat_if_only_adds_when_true()
+        {
+            var numbers = new[] { 1, 2, 3 };
+            var extras = new[] { 4, 5, 6 };
+
+            var added = numbers.ConcatIf(extras, true);
+            var same = numbers.ConcatIf(extras, false);
+
+            added.ShouldAllBeEquivalentTo(numbers.Concat(extras));
+            same.Should().BeSameAs(numbers);
+        }
+
+        [Fact]
+        public static void concat_if_only_adds_single_when_true()
+        {
+            var numbers = new[] { 1, 2, 3 };
+
+            var added = numbers.ConcatIf(4, true);
+            var same = numbers.ConcatIf(4, false);
+
+            added.ShouldAllBeEquivalentTo(numbers.Concat(4));
+            same.Should().BeSameAs(numbers);
         }
     }
 }
