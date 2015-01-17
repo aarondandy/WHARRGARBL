@@ -1,0 +1,63 @@
+﻿namespace Wharrgarbl.Lifetimes
+{
+    using System;
+    using System.Collections.Generic;
+    using System.Diagnostics.Contracts;
+    using System.Linq;
+    using System.Text;
+    using System.Threading.Tasks;
+
+    public class EnvVarLifetime : IDisposable
+    {
+        private EnvVarLifetime(string variable, string newValue, string originalValue, EnvironmentVariableTarget target) 
+        {
+            Contract.Requires(variable != null);
+
+            Variable = variable;
+            NewValue = newValue;
+            OriginalValue = originalValue;
+            Target = target;
+        }
+
+        ~EnvVarLifetime()
+        {
+            Restore();
+        }
+
+        public string Variable { get; private set; }
+
+        public string NewValue { get; private set; }
+
+        public string OriginalValue { get; private set; }
+
+        public EnvironmentVariableTarget Target { get; private set; }
+
+        public static EnvVarLifetime Set(string variable, string newValue)
+        {
+            return Set(variable, newValue, EnvironmentVariableTarget.Process);
+        }
+
+        public static EnvVarLifetime Set(string variable, string newValue, EnvironmentVariableTarget target)
+        {
+            var originalValue = Environment.GetEnvironmentVariable(variable, target);
+            Environment.SetEnvironmentVariable(variable, newValue);
+            return new EnvVarLifetime(variable, newValue, originalValue, target);
+        }
+
+        public void Dispose()
+        {
+            GC.SuppressFinalize(this);
+            Restore();
+        }
+
+        private void ObjectInvariants()
+        {
+            Contract.Invariant(Variable != null);
+        }
+
+        private void Restore()
+        {
+            Environment.SetEnvironmentVariable(Variable, OriginalValue, Target);
+        }
+    }
+}

@@ -46,10 +46,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IO\DirectoryPath.cs" />
-    <Compile Include="IO\FilePath.cs" />
-    <Compile Include="IO\FileSystemPath.cs" />
+    <Compile Include="Lifetimes\EnvVarLifetime.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Functions\EnvFn.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
