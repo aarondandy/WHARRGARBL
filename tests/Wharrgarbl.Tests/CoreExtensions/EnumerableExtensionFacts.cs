@@ -69,11 +69,23 @@
             result.ShouldAllBeEquivalentTo(new[] { 1, 2, 3, 4 });
         }
 
+        [Fact]
         public static void single_append_adds_to_empty()
         {
             var result = Enumerable.Empty<int>().Concat(1);
 
             result.ShouldAllBeEquivalentTo(new[] { 1 });
+        }
+
+        [Fact]
+        public static void for_each_iterates_all_items()
+        {
+            var input = new[] { 1,2,3};
+            var output = new List<int>();
+
+            input.ForEach(output.Add);
+
+            output.ShouldAllBeEquivalentTo(input);
         }
     }
 }

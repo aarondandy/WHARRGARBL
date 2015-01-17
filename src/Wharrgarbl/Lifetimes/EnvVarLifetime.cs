@@ -49,6 +49,7 @@
             return new EnvVarLifetime(variable, newValue, originalValue, target);
         }
 
+        /// <inheritdoc/>
         public void Dispose()
         {
             GC.SuppressFinalize(this);
