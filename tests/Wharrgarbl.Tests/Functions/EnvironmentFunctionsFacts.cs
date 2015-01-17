@@ -35,5 +35,49 @@
                 result.Should().Be("def456");
             }
         }
+
+        [Fact]
+        public static void get_does_not_return_empty_string()
+        {
+            using (EnvVarLifetime.Set("TEST_VAR", string.Empty))
+            {
+                var result = EnvFn.GetEnvVar("TEST_VAR");
+
+                result.Should().Be(null);
+            }
+        }
+
+        [Fact]
+        public static void set_does_not_return_empty_string()
+        {
+            using (EnvVarLifetime.Set("TEST_VAR", "junk"))
+            {
+                var result = EnvFn.SetEnvVar("TEST_VAR", string.Empty);
+
+                result.Should().Be(null);
+            }
+        }
+
+        [Fact]
+        public static void delete_removes_value()
+        {
+            using (EnvVarLifetime.Set("TEST_VAR", "junk"))
+            {
+                EnvFn.DeleteEnvVar("TEST_VAR");
+
+                EnvFn.GetEnvVar("TEST_VAR").Should().BeNull();
+            }
+        }
+
+        [Fact]
+        public static void delete_preserves_old_value()
+        {
+            using (EnvVarLifetime.Set("TEST_VAR", "deleted"))
+            {
+                var oldValue = EnvFn.DeleteEnvVar("TEST_VAR");
+
+                oldValue.Should().Be("deleted");
+            }
+        }
     }
 }
