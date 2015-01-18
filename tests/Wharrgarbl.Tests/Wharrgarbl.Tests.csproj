@@ -51,6 +51,7 @@
   <ItemGroup>
     <Compile Include="CoreExtensions\DelegateExtensionFacts.cs" />
     <Compile Include="CoreExtensions\EnumerableExtensionFacts.cs" />
+    <Compile Include="CoreExtensions\IOExtensionsFacts.cs" />
     <Compile Include="CoreExtensions\StringExtensionFacts.cs" />
     <Compile Include="Functions\EnumFunctionsFacts.cs" />
     <Compile Include="Lifetimes\EnvVarLifetimeFacts.cs" />
