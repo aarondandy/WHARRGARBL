@@ -52,6 +52,7 @@
     <Compile Include="CoreExtensions\DelegateExtensionFacts.cs" />
     <Compile Include="CoreExtensions\EnumerableExtensionFacts.cs" />
     <Compile Include="CoreExtensions\StringExtensionFacts.cs" />
+    <Compile Include="Functions\EnumFunctionsFacts.cs" />
     <Compile Include="Lifetimes\EnvVarLifetimeFacts.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Functions\EnvironmentFunctionsFacts.cs" />
