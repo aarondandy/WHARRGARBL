@@ -1,20 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Wharrgarbl.Tests.CoreExtensions
+﻿namespace Wharrgarbl.Tests.CoreExtensions
 {
     using System;
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
     using System.Text;
     using System.Threading.Tasks;
     using FluentAssertions;
     using Wharrgarbl.CoreExtensions;
     using Xunit;
-    using System.IO;
 
     public static class IOExtensionsFacts
     {

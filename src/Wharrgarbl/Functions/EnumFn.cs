@@ -21,17 +21,13 @@
         public static TEnum? ParseEnumOrNull<TEnum>(string value) where TEnum : struct
         {
             TEnum result;
-            if (Enum.TryParse(value, out result))
-                return result;
-            return default(TEnum?);
+            return Enum.TryParse(value, out result) ? result : default(TEnum?);
         }
 
         public static TEnum? ParseEnumOrNull<TEnum>(string value, bool ignoreCase) where TEnum : struct
         {
             TEnum result;
-            if (Enum.TryParse(value, ignoreCase, out result))
-                return result;
-            return default(TEnum?);
+            return Enum.TryParse(value, ignoreCase, out result) ? result : default(TEnum?);
         }
     }
 }

@@ -6,8 +6,8 @@
     using System.Text;
     using System.Threading.Tasks;
     using FluentAssertions;
-    using Wharrgarbl.Lifetimes;
     using Wharrgarbl.Functions;
+    using Wharrgarbl.Lifetimes;
     using Xunit;
 
     public static class EnvVarLifetimeFacts
