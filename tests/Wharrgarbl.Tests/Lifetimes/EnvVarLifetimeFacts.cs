@@ -7,6 +7,7 @@
     using System.Threading.Tasks;
     using FluentAssertions;
     using Wharrgarbl.Lifetimes;
+    using Wharrgarbl.Functions;
     using Xunit;
 
     public static class EnvVarLifetimeFacts
@@ -31,7 +32,7 @@
         {
             using (var outerLifetime = EnvVarLifetime.Set("TEST_VAR", "outer"))
             {
-                new Action(() =>
+                Fn.act(() =>
                 {
                     EnvVarLifetime.Set("TEST_VAR", "inner");
                     Environment.GetEnvironmentVariable("TEST_VAR").Should().Be("inner");

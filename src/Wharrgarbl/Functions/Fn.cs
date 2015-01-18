@@ -54,5 +54,50 @@
         {
             return f;
         }
+
+        public static Action act(Action a)
+        {
+            return a;
+        }
+
+        public static Action<T> act<T>(Action<T> a)
+        {
+            return a;
+        }
+
+        public static Action<T1, T2> act<T1, T2>(Action<T1, T2> a)
+        {
+            return a;
+        }
+
+        public static Action<T1, T2, T3> act<T1, T2, T3>(Action<T1, T2, T3> a)
+        {
+            return a;
+        }
+
+        public static Action<T1, T2, T3, T4> act<T1, T2, T3, T4>(Action<T1, T2, T3, T4> a)
+        {
+            return a;
+        }
+
+        public static Action<T1, T2, T3, T4, T5> act<T1, T2, T3, T4, T5>(Action<T1, T2, T3, T4, T5> a)
+        {
+            return a;
+        }
+
+        public static Action<T1, T2, T3, T4, T5, T6> act<T1, T2, T3, T4, T5, T6>(Action<T1, T2, T3, T4, T5, T6> a)
+        {
+            return a;
+        }
+
+        public static Action<T1, T2, T3, T4, T5, T6, T7> act<T1, T2, T3, T4, T5, T6, T7>(Action<T1, T2, T3, T4, T5, T6, T7> a)
+        {
+            return a;
+        }
+
+        public static Action<T1, T2, T3, T4, T5, T6, T7, T8> act<T1, T2, T3, T4, T5, T6, T7, T8>(Action<T1, T2, T3, T4, T5, T6, T7, T8> a)
+        {
+            return a;
+        }
     }
 }
