@@ -75,5 +75,57 @@
 
             actual.FullName.Should().Be(expected.FullName);
         }
+
+        [Fact]
+        public static void can_get_names_from_multiple_files()
+        {
+            var files = new[] {
+                "a.txt".ToFileInfo(),
+                "b.txt".ToFileInfo() };
+
+            var results = files.GetFullNames();
+
+            results.ShouldBeEquivalentTo(new[] {
+                new FileInfo("a.txt").FullName,
+                new FileInfo("b.txt").FullName});
+        }
+
+        [Fact]
+        public static void can_get_names_from_multiple_directories()
+        {
+            var files = new[] {
+                "a.txt".ToDirectoryInfo(),
+                "b.txt".ToDirectoryInfo() };
+
+            var results = files.GetFullNames();
+
+            results.ShouldBeEquivalentTo(new[] {
+                new DirectoryInfo("a.txt").FullName,
+                new DirectoryInfo("b.txt").FullName});
+        }
+
+        [Fact]
+        public static void can_wait_for_single_directory_create_and_delete()
+        {
+            var di = "subDir".ToDirectoryInfo();
+            try
+            {
+                di.CreateAndWait();
+
+                File.Exists(di.FullName).Should().BeTrue();
+
+                di.DeleteAndWait();
+
+                File.Exists(di.FullName).Should().BeFalse();
+            }
+            catch
+            {
+                if (di.Exists)
+                {
+                    di.Delete();
+                }
+                throw;
+            }
+        }
     }
 }

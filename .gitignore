@@ -6,6 +6,7 @@ obj
 *.userprefs
 *.ncrunch*
 *.crunchsolution.cache
+_NCrunch_*
 
 artifacts
 packages

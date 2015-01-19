@@ -1,7 +1,10 @@
 ﻿namespace Wharrgarbl.CoreExtensions
 {
     using System;
+    using System.Collections.Generic;
+    using System.Diagnostics.Contracts;
     using System.IO;
+    using System.Linq;
 
     public static class IOEx
     {
@@ -37,6 +40,27 @@
         {
             var combined = Combine(directory, relativePaths);
             return new FileInfo(combined);
+        }
+
+        public static IEnumerable<string> GetFullNames(this IEnumerable<FileSystemInfo> infos)
+        {
+            if (infos == null) throw new ArgumentNullException("infos");
+            Contract.Ensures(Contract.Result<IEnumerable<string>>() != null);
+            return infos.Select(x => x.FullName);
+        }
+
+        public static void CreateAndWait(this DirectoryInfo directory)
+        {
+            var watcher = new FileSystemWatcher(directory.Parent.FullName);
+            directory.Create();
+            watcher.WaitForChanged(WatcherChangeTypes.Created);
+        }
+
+        public static void DeleteAndWait(this DirectoryInfo directory)
+        {
+            var watcher = new FileSystemWatcher(directory.FullName);
+            directory.Delete();
+            watcher.WaitForChanged(WatcherChangeTypes.Deleted);
         }
 
         private static string Combine(this DirectoryInfo directory, string relativePath)
