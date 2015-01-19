@@ -5,6 +5,8 @@
     using System.Diagnostics.Contracts;
     using System.IO;
     using System.Linq;
+    using System.Threading;
+    using System.Threading.Tasks;
 
     public static class IOEx
     {
@@ -49,18 +51,69 @@
             return infos.Select(x => x.FullName);
         }
 
-        public static void CreateAndWait(this DirectoryInfo directory)
+        public static Task<DirectoryInfo> CreateAsync(this DirectoryInfo directory)
         {
-            var watcher = new FileSystemWatcher(directory.Parent.FullName);
+            if (Directory.Exists(directory.FullName))
+            {
+                return Task.FromResult(directory);
+            }
+
+            var taskSource = new TaskCompletionSource<DirectoryInfo>();
+            var watcher = new FileSystemWatcher(directory.Parent.FullName, directory.Name);
+            FileSystemEventHandler handler = null;
+            handler = (_, e) =>
+            {
+                if (e.Name == directory.Name)
+                {
+                    taskSource.TrySetResult(new DirectoryInfo(directory.FullName));
+                    watcher.Created -= handler;
+                    watcher.Dispose();
+                    directory.Refresh();
+                }
+            };
+            watcher.Created += handler;
+            watcher.EnableRaisingEvents = true;
+
             directory.Create();
-            watcher.WaitForChanged(WatcherChangeTypes.Created);
+
+            return taskSource.Task;
         }
 
-        public static void DeleteAndWait(this DirectoryInfo directory)
+        public static Task<DirectoryInfo[]> CreateAsync(this IEnumerable<DirectoryInfo> directories)
         {
-            var watcher = new FileSystemWatcher(directory.FullName);
-            directory.Delete();
-            watcher.WaitForChanged(WatcherChangeTypes.Deleted);
+            return Task.WhenAll(directories.Select(x => x.CreateAsync()));
+        }
+
+        public static Task<DirectoryInfo> DeleteAsync(this DirectoryInfo directory, bool recursive = false)
+        {
+            if (!Directory.Exists(directory.FullName))
+            {
+                return Task.FromResult(directory);
+            }
+
+            var taskSource = new TaskCompletionSource<DirectoryInfo>();
+            var watcher = new FileSystemWatcher(directory.Parent.FullName, directory.Name);
+            FileSystemEventHandler handler = null;
+            handler = (_, e) =>
+            {
+                if (e.Name == directory.Name) // TODO: try to create a test that causes this to be false
+                {
+                    taskSource.TrySetResult(new DirectoryInfo(directory.FullName));
+                    watcher.Deleted -= handler;
+                    watcher.Dispose();
+                }
+            };
+            watcher.Deleted += handler;
+            watcher.EnableRaisingEvents = true;
+
+            directory.Delete(recursive);
+
+            return taskSource.Task;
+        }
+
+        public static Task<DirectoryInfo[]> DeleteAsync(this IEnumerable<DirectoryInfo> directories, bool recursive = false)
+        {
+            return Task.WhenAll(directories.Select(x => x.DeleteAsync(recursive)));
         }
 
         private static string Combine(this DirectoryInfo directory, string relativePath)
