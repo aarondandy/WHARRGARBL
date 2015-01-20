@@ -153,8 +153,8 @@
                 var endTime = DateTime.UtcNow;
                 Console.WriteLine("Create many: {0}ms", (endTime - startTime).TotalMilliseconds);
 
-                createResults.All(di => Directory.Exists(di.FullName)).Should().BeTrue();
-                createResults.All(di => di.Exists).Should().BeTrue();
+                createResults.Select(di => Directory.Exists(di.FullName)).Should().OnlyContain(x => x == true);
+                createResults.Select(di => di.Exists).Should().OnlyContain(x => x == true);
                 createResults.GetFullNames().Should().BeEquivalentTo(dirInfos.GetFullNames());
             }
             finally
@@ -183,8 +183,8 @@
                 var endTime = DateTime.UtcNow;
                 Console.WriteLine("Delete many: {0}ms", (endTime - startTime).TotalMilliseconds);
 
-                createResults.All(di => Directory.Exists(di.FullName)).Should().BeFalse();
-                createResults.All(di => di.Exists).Should().BeFalse();
+                createResults.Select(di => Directory.Exists(di.FullName)).Should().OnlyContain(x => x == false);
+                createResults.Select(di => di.Exists).Should().OnlyContain(x => x == false);
                 createResults.GetFullNames().Should().BeEquivalentTo(dirInfos.GetFullNames());
             }
             finally
@@ -221,8 +221,8 @@
                 var endTime = DateTime.UtcNow;
                 Console.WriteLine("Delete many recursive: {0}ms", (endTime - startTime).TotalMilliseconds);
 
-                createResults.All(di => Directory.Exists(di.FullName)).Should().BeFalse();
-                createResults.All(di => di.Exists).Should().BeFalse();
+                createResults.Select(di => Directory.Exists(di.FullName)).Should().OnlyContain(x => x == false);
+                createResults.Select(di => di.Exists).Should().OnlyContain(x => x == false);
                 createResults.GetFullNames().Should().BeEquivalentTo(dirInfos.GetFullNames());
             }
             finally
