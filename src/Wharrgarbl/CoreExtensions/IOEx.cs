@@ -93,6 +93,22 @@
             return Task.WhenAll(directories.Select(x => x.DeleteAsync(recursive)));
         }
 
+        public static Task<FileInfo> DeleteAsync(this FileInfo file)
+        {
+            if (!System.IO.File.Exists(file.FullName))
+            {
+                return Task.FromResult(new FileInfo(file.FullName));
+            }
+
+            return Task.Factory.StartNew(() =>
+            {
+                file.Delete();
+                var result = new FileInfo(file.FullName);
+                Contract.Assume(!result.Exists);
+                return result;
+            });
+        }
+
         private static string Combine(this DirectoryInfo directory, string relativePath)
         {
             return Path.Combine(directory.FullName, relativePath);

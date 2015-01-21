@@ -231,6 +231,30 @@
             }
         }
 
+        [Fact]
+        public static void wait_for_single_file_delete()
+        {
+            var subDirName = GetFileName("subDir");
+            var di = CreateAndUpdate(DeleteAndUpdate(new DirectoryInfo(subDirName)));
+            var fi = di.File("test.txt");
+
+            try
+            {
+                File.WriteAllText(fi.FullName, subDirName);
+                fi.Refresh();
+
+                var result = fi.DeleteAsync().Result;
+
+                File.Exists(result.FullName).Should().BeFalse();
+                result.Exists.Should().BeFalse();
+                result.FullName.Should().Be(fi.FullName);
+            }
+            finally
+            {
+                DeleteAndUpdate(di);
+            }
+        }
+
         private static DirectoryInfo DeleteAndUpdate(DirectoryInfo di, bool sleep = true)
         {
             if (Directory.Exists(di.FullName))
