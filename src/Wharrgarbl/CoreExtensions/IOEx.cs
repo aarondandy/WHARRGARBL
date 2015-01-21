@@ -55,28 +55,16 @@
         {
             if (Directory.Exists(directory.FullName))
             {
-                return Task.FromResult(directory);
+                return Task.FromResult(new DirectoryInfo(directory.FullName));
             }
 
-            var taskSource = new TaskCompletionSource<DirectoryInfo>();
-            var watcher = new FileSystemWatcher(directory.Parent.FullName, directory.Name);
-            FileSystemEventHandler handler = null;
-            handler = (_, e) =>
+            return Task.Factory.StartNew(() =>
             {
-                if (e.Name == directory.Name)
-                {
-                    taskSource.TrySetResult(new DirectoryInfo(directory.FullName));
-                    watcher.Created -= handler;
-                    watcher.Dispose();
-                    directory.Refresh();
-                }
-            };
-            watcher.Created += handler;
-            watcher.EnableRaisingEvents = true;
-
-            directory.Create();
-
-            return taskSource.Task;
+                directory.Create();
+                var result = new DirectoryInfo(directory.FullName);
+                Contract.Assume(result.Exists);
+                return result;
+            });
         }
 
         public static Task<DirectoryInfo[]> CreateAsync(this IEnumerable<DirectoryInfo> directories)
@@ -88,27 +76,16 @@
         {
             if (!Directory.Exists(directory.FullName))
             {
-                return Task.FromResult(directory);
+                return Task.FromResult(new DirectoryInfo(directory.FullName));
             }
 
-            var taskSource = new TaskCompletionSource<DirectoryInfo>();
-            var watcher = new FileSystemWatcher(directory.Parent.FullName, directory.Name);
-            FileSystemEventHandler handler = null;
-            handler = (_, e) =>
+            return Task.Factory.StartNew(() =>
             {
-                if (e.Name == directory.Name) // TODO: try to create a test that causes this to be false
-                {
-                    taskSource.TrySetResult(new DirectoryInfo(directory.FullName));
-                    watcher.Deleted -= handler;
-                    watcher.Dispose();
-                }
-            };
-            watcher.Deleted += handler;
-            watcher.EnableRaisingEvents = true;
-
-            directory.Delete(recursive);
-
-            return taskSource.Task;
+                directory.Delete(recursive);
+                var result = new DirectoryInfo(directory.FullName);
+                Contract.Assume(!result.Exists);
+                return result;
+            });
         }
 
         public static Task<DirectoryInfo[]> DeleteAsync(this IEnumerable<DirectoryInfo> directories, bool recursive = false)
