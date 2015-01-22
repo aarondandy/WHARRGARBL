@@ -1,9 +1,4 @@
 using System.Text.RegularExpressions;
-using Wharrgarbl.CoreExtensions;
-using Wharrgarbl.Lifetimes;
-using Wharrgarbl.Functions.EnumFn;
-using Wharrgarbl.Functions.EnvFn;
-using Wharrgarbl.Functions.Fn;
 
 // parameters
 var msBuildFileVerbosity = ParseEnum<BauMSBuild.Verbosity>(GetEnvVar("MSBUILD_FILE_VERBOSITY") ?? "minimal", true);
