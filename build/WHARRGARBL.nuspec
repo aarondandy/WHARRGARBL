@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>WHARRGARBL</id>
+    <version>$version$</version>
+    <title>WHARRGARBL</title>
+    <authors>aarondandy</authors>
+    <description>Various wrappers, extensions, implicit casts and other terrible things to make scriptcs a bit easier.</description>
+    <licenseUrl>https://raw.githubusercontent.com/aarondandy/WHARRGARBL/master/LICENSE.txt</licenseUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <tags>extensions helpers scriptcs</tags>
+    <projectUrl>http://mediocresoft.com/vertesaur/</projectUrl>
+    <references>
+      <reference file="Wharrgarbl.dll" />
+    </references>
+  </metadata>
+  <files>
+    <file src="..\artifacts\bin\$configuration$\Wharrgarbl.dll" target="lib\net45" />
+    <file src="..\artifacts\bin\$configuration$\Wharrgarbl.pdb" target="lib\net45" />
+    <file src="..\artifacts\bin\$configuration$\Wharrgarbl.XML" target="lib\net45" />
+
+    <file src="..\artifacts\bin\$configuration$\CodeContracts\Wharrgarbl.Contracts.dll" target="lib\net45\CodeContracts" />
+    <file src="..\src\Wharrgarbl\**.cs" target="src" />
+  </files>
+</package>

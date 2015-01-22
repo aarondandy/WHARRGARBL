@@ -9,12 +9,14 @@
     using Wharrgarbl.Functions;
     using Wharrgarbl.Lifetimes;
     using Xunit;
+    using Wharrgarbl.Tests.TestHelpers;
 
     public static class EnvironmentFunctionsFacts
     {
         [Fact]
         public static void can_get_variable()
         {
+            lock (ATerribleMistake.EnvironmentVariableLock)
             using (EnvVarLifetime.Set("TEST_VAR", "abc123"))
             {
                 var result = EnvFn.GetEnvVar("TEST_VAR");
@@ -26,6 +28,7 @@
         [Fact]
         public static void can_set_variable()
         {
+            lock (ATerribleMistake.EnvironmentVariableLock)
             using (EnvVarLifetime.Set("TEST_VAR", "abc123"))
             {
                 EnvFn.SetEnvVar("TEST_VAR", "def456");
@@ -39,6 +42,7 @@
         [Fact]
         public static void get_does_not_return_empty_string()
         {
+            lock (ATerribleMistake.EnvironmentVariableLock)
             using (EnvVarLifetime.Set("TEST_VAR", string.Empty))
             {
                 var result = EnvFn.GetEnvVar("TEST_VAR");
@@ -50,6 +54,7 @@
         [Fact]
         public static void set_does_not_return_empty_string()
         {
+            lock (ATerribleMistake.EnvironmentVariableLock)
             using (EnvVarLifetime.Set("TEST_VAR", "junk"))
             {
                 var result = EnvFn.SetEnvVar("TEST_VAR", string.Empty);
@@ -61,6 +66,7 @@
         [Fact]
         public static void delete_removes_value()
         {
+            lock (ATerribleMistake.EnvironmentVariableLock)
             using (EnvVarLifetime.Set("TEST_VAR", "junk"))
             {
                 EnvFn.DeleteEnvVar("TEST_VAR");
@@ -72,6 +78,7 @@
         [Fact]
         public static void delete_preserves_old_value()
         {
+            lock (ATerribleMistake.EnvironmentVariableLock)
             using (EnvVarLifetime.Set("TEST_VAR", "deleted"))
             {
                 var oldValue = EnvFn.DeleteEnvVar("TEST_VAR");

@@ -9,27 +9,32 @@
     using Wharrgarbl.Functions;
     using Wharrgarbl.Lifetimes;
     using Xunit;
+    using Wharrgarbl.Tests.TestHelpers;
 
     public static class EnvVarLifetimeFacts
     {
         [Fact]
         public static void can_set_and_restore_process_var()
         {
-            Environment.SetEnvironmentVariable("TEST_VAR", "old_value", EnvironmentVariableTarget.Process);
-
-            using (var lifetime = EnvVarLifetime.Set("TEST_VAR", "new_value", EnvironmentVariableTarget.Process))
+            lock (ATerribleMistake.EnvironmentVariableLock)
             {
-                Environment.GetEnvironmentVariable("TEST_VAR", EnvironmentVariableTarget.Process)
-                .Should().Be("new_value");
-            }
+                Environment.SetEnvironmentVariable("TEST_VAR", "old_value", EnvironmentVariableTarget.Process);
 
-            Environment.GetEnvironmentVariable("TEST_VAR", EnvironmentVariableTarget.Process)
-                .Should().Be("old_value");
+                using (var lifetime = EnvVarLifetime.Set("TEST_VAR", "new_value", EnvironmentVariableTarget.Process))
+                {
+                    Environment.GetEnvironmentVariable("TEST_VAR", EnvironmentVariableTarget.Process)
+                    .Should().Be("new_value");
+                }
+
+                Environment.GetEnvironmentVariable("TEST_VAR", EnvironmentVariableTarget.Process)
+                    .Should().Be("old_value");
+            }
         }
 
         [Fact]
         public static void finalizer_restores_environment_variable()
         {
+            lock (ATerribleMistake.EnvironmentVariableLock)
             using (var outerLifetime = EnvVarLifetime.Set("TEST_VAR", "outer"))
             {
                 Fn.act(() =>

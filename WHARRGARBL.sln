@@ -11,6 +11,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{484F990F
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wharrgarbl.Tests", "tests\Wharrgarbl.Tests\Wharrgarbl.Tests.csproj", "{52A7684F-A9B1-4ACF-B3D5-CB05B7892AB3}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{D3D6E098-40AE-4EDF-B55F-F0B6778D98B3}"
+	ProjectSection(SolutionItems) = preProject
+		build\build.csx = build\build.csx
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
