@@ -48,5 +48,14 @@
 
             result.Should().BeEquivalentTo(new[] { "1", "2", "3" });
         }
+
+        [Fact]
+        public static void compare_case_insensitive_oridnal()
+        {
+            "LETTERS".EqualsOrdinal("letters", true).Should().BeTrue();
+            "LETTERS".EqualsOrdinal("letters", false).Should().BeFalse();
+            "LETTERS".EqualsOrdinal("numbers", true).Should().BeFalse();
+            "LETTERS".EqualsOrdinal("numbers", false).Should().BeFalse();
+        }
     }
 }

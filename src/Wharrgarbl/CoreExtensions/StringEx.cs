@@ -35,5 +35,10 @@
         {
             return values.Where(value => !string.IsNullOrEmpty(value)); // TODO: replace with WhereNot
         }
+
+        public static bool EqualsOrdinal(this string @this, string value, bool ignoreCase = false)
+        {
+            return @this.Equals(value, ignoreCase ? StringComparison.OrdinalIgnoreCase : StringComparison.Ordinal);
+        }
     }
 }

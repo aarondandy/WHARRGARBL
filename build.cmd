@@ -1,5 +1,5 @@
 @echo OFF
 pushd %~dp0build
-scriptcs -install
+scriptcs -I
 scriptcs baufile.csx -- %*
 popd

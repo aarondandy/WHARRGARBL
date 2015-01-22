@@ -1,4 +1,6 @@
+using System.Text.RegularExpressions;
 using Wharrgarbl.CoreExtensions;
+using Wharrgarbl.Lifetimes;
 using Wharrgarbl.Functions.EnumFn;
 using Wharrgarbl.Functions.EnvFn;
 using Wharrgarbl.Functions.Fn;
@@ -17,21 +19,19 @@ var nugetOutputDir = artifactDir.Subdirectory("nuget");
 var logsDir = artifactDir.Subdirectory("logs");
 var solutionFile = repositoryDir.EnumerateFiles("*.sln").Single();
 
-var versionParts = File.ReadAllText(repositoryDir.File("src/Wharrgarbl/Properties/AssemblyInfo.cs").FullName)
-    .Split(new[] { "AssemblyVersion(\"" }, 2, StringSplitOptions.None)
-    .ElementAt(1)
-    .Split(new[] { '"' })
-    .First()
-    .Split(new[] { '.' })
-    .Take(3);
-var version = string.Join(".", versionParts);
+// parsed variables
+var versionRegex = new Regex(@"^\s*\[assembly:\s*AssemblyVersion(?:Attribute)?\(\""([\d.\*]+)\""\)\]\s*");
+var version = File.ReadAllLines(repositoryDir.Combine("src/Wharrgarbl/Properties/AssemblyInfo.cs"))
+    .Select(line => versionRegex.Match(line))
+    .Single(match => match.Success)
+    .Groups[1].Value.Split('.').Take(3).Join(".");
 
 // helpers
-var getVersionSuffix = fun(
-    () => "Release".Equals(buildConfigurationName, StringComparison.OrdinalIgnoreCase)
+var getVersionSuffix = fun(() =>
+    "Release".Equals(buildConfigurationName, StringComparison.OrdinalIgnoreCase)
     ? string.Empty
-    : (Environment.GetEnvironmentVariable("VERSION_SUFFIX") ?? "-adhoc"));
-var getBinaryOutputFolder = fun(() => new DirectoryInfo(Path.Combine(artifactDir.FullName, "bin", buildConfigurationName)));
+    : (GetEnvVar("VERSION_SUFFIX") ?? "-adhoc"));
+var getBinaryOutputFolder = fun(() => artifactDir.Subdirectory("bin", buildConfigurationName));
 
 // tasks
 Require<Bau>()
@@ -82,9 +82,7 @@ Require<Bau>()
 .Do(xunit => {
     xunit.Exe = buildPackagesDir
 		.EnumerateDirectories("xunit.runners.*").Single()
-		.EnumerateDirectories("tools").Single()
-        .EnumerateFiles("xunit.console.exe").Single()
-        .FullName;
+        .Combine("tools/xunit.console.exe");
     xunit.Assemblies = getBinaryOutputFolder()
         .Subdirectory("tests")
         .EnumerateFiles("*.Tests.dll")
