@@ -8,8 +8,8 @@
     using FluentAssertions;
     using Wharrgarbl.Functions;
     using Wharrgarbl.Lifetimes;
-    using Xunit;
     using Wharrgarbl.Tests.TestHelpers;
+    using Xunit;
 
     public static class EnvironmentFunctionsFacts
     {

@@ -12,7 +12,6 @@
     /// </summary>
     public static class EnumerableEx
     {
-
         public static IEnumerable<T> WhereNot<T>(this IEnumerable<T> values, Func<T, bool> predicate)
         {
             if (predicate == null) throw new ArgumentNullException("predicate");
