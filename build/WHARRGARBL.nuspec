@@ -9,7 +9,7 @@
     <licenseUrl>https://raw.githubusercontent.com/aarondandy/WHARRGARBL/master/LICENSE.txt</licenseUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <tags>extensions helpers scriptcs</tags>
-    <projectUrl>http://mediocresoft.com/vertesaur/</projectUrl>
+    <projectUrl>https://github.com/aarondandy/WHARRGARBL</projectUrl>
     <references>
       <reference file="Wharrgarbl.dll" />
     </references>
