@@ -1,18 +1,23 @@
+using Wharrgarbl.CoreExtensions;
+using Wharrgarbl.Functions.EnumFn;
+using Wharrgarbl.Functions.EnvFn;
+using Wharrgarbl.Functions.Fn;
+
 // parameters
-var msBuildFileVerbosity = (BauMSBuild.Verbosity)Enum.Parse(typeof(BauMSBuild.Verbosity), Environment.GetEnvironmentVariable("MSBUILD_FILE_VERBOSITY") ?? "minimal", true);
-var nugetVerbosity = (BauNuGet.Verbosity)Enum.Parse(typeof(BauNuGet.Verbosity), Environment.GetEnvironmentVariable("NUGET_VERBOSITY") ?? "quiet", true);
-var buildConfigurationName = Environment.GetEnvironmentVariable("CONFIGURATION_NAME") ?? "Debug";
+var msBuildFileVerbosity = ParseEnum<BauMSBuild.Verbosity>(GetEnvVar("MSBUILD_FILE_VERBOSITY") ?? "minimal", true);
+var nugetVerbosity = ParseEnum<BauNuGet.Verbosity>(GetEnvVar("NUGET_VERBOSITY") ?? "quiet", true);
+var buildConfigurationName = GetEnvVar("CONFIGURATION_NAME") ?? "Debug";
 
 // solution specific variables
 var buildDir = new DirectoryInfo("./");
-var buildPackagesDir = new DirectoryInfo("packages");
-var artifactDir = new DirectoryInfo("../artifacts");
-var nugetOutputDir = new DirectoryInfo(Path.Combine(artifactDir.FullName, "nuget"));
-var logsDir = new DirectoryInfo(Path.Combine(artifactDir.FullName, "logs"));
-var repositoryDir = new DirectoryInfo("../");
+var buildPackagesDir = buildDir.Subdirectory("packages");
+var repositoryDir = buildDir.Parent;
+var artifactDir = repositoryDir.Subdirectory("artifacts");
+var nugetOutputDir = artifactDir.Subdirectory("nuget");
+var logsDir = artifactDir.Subdirectory("logs");
 var solutionFile = repositoryDir.EnumerateFiles("*.sln").Single();
 
-var versionParts = File.ReadAllText(Path.Combine(repositoryDir.FullName, "src/Wharrgarbl/Properties/AssemblyInfo.cs"))
+var versionParts = File.ReadAllText(repositoryDir.File("src/Wharrgarbl/Properties/AssemblyInfo.cs").FullName)
     .Split(new[] { "AssemblyVersion(\"" }, 2, StringSplitOptions.None)
     .ElementAt(1)
     .Split(new[] { '"' })
@@ -22,10 +27,11 @@ var versionParts = File.ReadAllText(Path.Combine(repositoryDir.FullName, "src/Wh
 var version = string.Join(".", versionParts);
 
 // helpers
-Func<string> getVersionSuffix = () => "Release".Equals(buildConfigurationName, StringComparison.OrdinalIgnoreCase)
-        ? string.Empty
-        : (Environment.GetEnvironmentVariable("VERSION_SUFFIX") ?? "-adhoc");
-Func<DirectoryInfo> getBinaryOutputFolder = () => new DirectoryInfo(Path.Combine(artifactDir.FullName, "bin", buildConfigurationName));
+var getVersionSuffix = fun(
+    () => "Release".Equals(buildConfigurationName, StringComparison.OrdinalIgnoreCase)
+    ? string.Empty
+    : (Environment.GetEnvironmentVariable("VERSION_SUFFIX") ?? "-adhoc"));
+var getBinaryOutputFolder = fun(() => new DirectoryInfo(Path.Combine(artifactDir.FullName, "bin", buildConfigurationName)));
 
 // tasks
 Require<Bau>()
@@ -39,7 +45,7 @@ Require<Bau>()
 .NuGet("restore").Do(nuget => nuget.Restore(solutionFile.FullName))
 
 .MSBuild("build")
-.DependsOn("restore", "create-artifact-folders")
+.DependsOn("restore", "nuke-artifacts", "create-artifact-folders")
 .Do(msb => {
     msb.Solution = solutionFile.FullName;
     msb.Targets = new[] { "Clean", "Build" };
@@ -57,9 +63,9 @@ Require<Bau>()
 })
 
 .NuGet("pack")
-.DependsOn("build")
+.DependsOn("build", "test")
 .Do(nuget => nuget.Pack(
-    Directory.EnumerateFiles(buildDir.FullName, "*.nuspec"),
+    buildDir.EnumerateFiles("*.nuspec").GetFullNames(),
     r => r
         .WithOutputDirectory(nugetOutputDir.FullName)
         .WithProperty("Configuration", buildConfigurationName)
@@ -79,21 +85,22 @@ Require<Bau>()
 		.EnumerateDirectories("tools").Single()
         .EnumerateFiles("xunit.console.exe").Single()
         .FullName;
-    //xunit.Args = "-parallel none";
-    xunit.Assemblies = Directory.EnumerateFiles(Path.Combine(getBinaryOutputFolder().FullName,"tests"), "*.Tests.dll");
-    Console.WriteLine(Path.Combine(getBinaryOutputFolder().FullName,"tests"));
+    xunit.Assemblies = getBinaryOutputFolder()
+        .Subdirectory("tests")
+        .EnumerateFiles("*.Tests.dll")
+        .GetFullNames();
+})
+    
+.Task("nuke-artifacts").Do(() => {
+    artifactDir.EnumerateDirectories().DeleteAsync(true).Wait();
 })
 
 .Task("create-artifact-folders").Do(() => {
-    var dirsToCreate = new[] {
+    new[] {
         artifactDir,
         nugetOutputDir,
         logsDir
-    }.Where(di => !di.Exists);
-    foreach(var di in dirsToCreate) {
-        di.Create();
-    }
-    System.Threading.Thread.Sleep(100);
+    }.CreateAsync().Wait();
 })
 
 .Run();

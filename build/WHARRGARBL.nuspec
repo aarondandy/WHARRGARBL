@@ -19,7 +19,7 @@
     <file src="..\artifacts\bin\$configuration$\Wharrgarbl.pdb" target="lib\net45" />
     <file src="..\artifacts\bin\$configuration$\Wharrgarbl.XML" target="lib\net45" />
 
-    <file src="..\artifacts\bin\$configuration$\CodeContracts\Wharrgarbl.Contracts.dll" target="lib\net45\CodeContracts" />
+    <!--file src="..\artifacts\bin\$configuration$\CodeContracts\Wharrgarbl.Contracts.dll" target="lib\net45\CodeContracts" /-->
     <file src="..\src\Wharrgarbl\**.cs" target="src" />
   </files>
 </package>

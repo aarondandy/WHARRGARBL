@@ -109,12 +109,12 @@
             });
         }
 
-        private static string Combine(this DirectoryInfo directory, string relativePath)
+        public static string Combine(this DirectoryInfo directory, string relativePath)
         {
             return Path.Combine(directory.FullName, relativePath);
         }
 
-        private static string Combine(this DirectoryInfo directory, params string[] relativePaths)
+        public static string Combine(this DirectoryInfo directory, params string[] relativePaths)
         {
             return Path.Combine(BuildPathParts(directory, relativePaths));
         }

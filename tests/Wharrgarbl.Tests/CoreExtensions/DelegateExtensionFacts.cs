@@ -32,8 +32,8 @@
             var pred = new Predicate<int>(x => x % 2 == 0);
             var func = Fn.fun((int x) => x % 2 == 0).AsPredicate();
 
-            var predNumbers = numbers.Where(pred);
-            var funcNumbers = numbers.Where(func);
+            var predNumbers = numbers.Where(x => pred(x));
+            var funcNumbers = numbers.Where(x => func(x));
 
             predNumbers.Should().BeEquivalentTo(funcNumbers);
         }
@@ -57,7 +57,7 @@
             var even = new Predicate<int>(x => x % 2 == 0);
             var odd = even.Negated();
 
-            var oddNumbers = numbers.Where(odd);
+            var oddNumbers = numbers.Where(x => odd(x));
 
             oddNumbers.ShouldAllBeEquivalentTo(new[] { 1, 3, 5 });
         }

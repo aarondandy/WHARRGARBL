@@ -25,41 +25,6 @@
         }
 
         [Fact]
-        public static void where_for_predicate()
-        {
-            var numbers = Enumerable.Range(0, 5);
-            Predicate<int> isEven = x => x % 2 == 0;
-
-            var evenNumbers = numbers.Where(isEven);
-
-            evenNumbers.Should().BeEquivalentTo(new[] { 0, 2, 4 });
-        }
-
-        [Fact]
-        public static void where_pred_and_func_match()
-        {
-            var numbers = Enumerable.Range(0, 10);
-            Predicate<int> isEven = x => x % 2 == 0;
-
-            var predicateNumbers = numbers.Where(isEven);
-            var funcNumbers = numbers.Where(isEven.AsFunc());
-
-            predicateNumbers.Should().BeEquivalentTo(funcNumbers);
-        }
-
-        [Fact]
-        public static void where_not_pred_and_func_match()
-        {
-            var numbers = Enumerable.Range(0, 10);
-            Predicate<int> isEven = x => x % 2 == 0;
-
-            var predicateNumbers = numbers.WhereNot(isEven);
-            var funcNumbers = numbers.WhereNot(isEven.AsFunc());
-
-            predicateNumbers.Should().BeEquivalentTo(funcNumbers);
-        }
-
-        [Fact]
         public static void single_append_adds_to_existing()
         {
             var data = new[] { 1, 2, 3 };
