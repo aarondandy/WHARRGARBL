@@ -142,6 +142,8 @@
     <Compile Include="Lifetimes\EnvVarLifetime.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Functions\EnvFn.cs" />
+    <Compile Include="WharrgarblScriptPack.cs" />
+    <Compile Include="WharrgarblScriptPackContext.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
