@@ -27,10 +27,7 @@ var version = File.ReadAllLines(repositoryDir.Combine("src/Wharrgarbl/Properties
     .Groups[1].Value.Split('.').Take(3).Join(".");
 
 // helpers
-var getVersionSuffix = fun(() =>
-    "Release".Equals(buildConfigurationName, StringComparison.OrdinalIgnoreCase)
-    ? string.Empty
-    : (GetEnvVar("VERSION_SUFFIX") ?? "-adhoc"));
+var getVersionSuffix = fun(() => "Release".EqualsOrdinal(buildConfigurationName, true) ? string.Empty : (GetEnvVar("VERSION_SUFFIX") ?? "-adhoc"));
 var getBinaryOutputFolder = fun(() => artifactDir.Subdirectory("bin", buildConfigurationName));
 
 // tasks
@@ -57,7 +54,7 @@ Require<Bau>()
             PerformanceSummary = true,
             Summary = true,
             Verbosity = msBuildFileVerbosity,
-            LogFile = Path.Combine(logsDir.FullName, "build.log")
+            LogFile = logsDir.Combine("build.log")
         }
     });
 })
