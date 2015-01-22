@@ -37,7 +37,7 @@ Require<Bau>()
 
 .Task("release").DependsOn("set-release", "default", "pack")
 
-.Task("set-release").Do(() => {buildConfigurationName = "Release";})
+.Task("set-release").Do(() => buildConfigurationName = "Release")
 
 .NuGet("restore").Do(nuget => nuget.Restore(solutionFile.FullName))
 
@@ -86,16 +86,12 @@ Require<Bau>()
         .GetFullNames();
 })
     
-.Task("nuke-artifacts").Do(() => {
-    artifactDir.EnumerateDirectories().DeleteAsync(true).Wait();
-})
+.Task("nuke-artifacts").Do(() => artifactDir.EnumerateDirectories().DeleteAsync(true).Wait())
 
-.Task("create-artifact-folders").Do(() => {
-    new[] {
-        artifactDir,
-        nugetOutputDir,
-        logsDir
-    }.CreateAsync().Wait();
-})
+.Task("create-artifact-folders").Do(() => new[] {
+    artifactDir,
+    nugetOutputDir,
+    logsDir
+}.CreateAsync().Wait())
 
 .Run();
