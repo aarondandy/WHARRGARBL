@@ -1,5 +1,4 @@
 @echo OFF
+setlocal
 pushd %~dp0build
-scriptcs -I
-scriptcs baufile.csx -- %*
-popd
+scriptcs -script baufile.csx -I -- %*
