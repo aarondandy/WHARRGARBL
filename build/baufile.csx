@@ -4,6 +4,7 @@ using System.Text.RegularExpressions;
 var msBuildFileVerbosity = ParseEnum<BauMSBuild.Verbosity>(GetEnvVar("MSBUILD_FILE_VERBOSITY") ?? "minimal", true);
 var nugetVerbosity = ParseEnum<BauNuGet.Verbosity>(GetEnvVar("NUGET_VERBOSITY") ?? "quiet", true);
 var buildConfigurationName = GetEnvVar("CONFIGURATION_NAME") ?? "Debug";
+var versionPreReleaseSuffix = GetEnvVar("VERSION_SUFFIX") ?? "adhoc";
 
 // solution specific variables
 var buildDir = new DirectoryInfo("./");
@@ -15,9 +16,8 @@ var logsDir = artifactDir.Subdirectory("logs");
 var solutionFile = repositoryDir.EnumerateFiles("*.sln").Single();
 
 // helpers
-var getVersionSuffix = fun(() => "Release".EqualsOrdinal(buildConfigurationName, true) ? string.Empty : (GetEnvVar("VERSION_SUFFIX") ?? "-adhoc"));
+var getVersionSuffix = fun(() => "Release".EqualsOrdinal(buildConfigurationName, true) ? string.Empty : versionPreReleaseSuffix);
 var getBinaryOutputFolder = fun(() => artifactDir.Subdirectory("bin", buildConfigurationName));
-var getVersion = fun(() => System.Reflection.AssemblyName.GetAssemblyName(getBinaryOutputFolder().File("Wharrgarbl.dll").FullName).Version.ToString().Split('.').Take(3).Join("."));
 
 // tasks
 Require<Bau>()
@@ -50,16 +50,17 @@ Require<Bau>()
 
 .NuGet("pack")
 .DependsOn("build", "test")
-.Do(nuget => nuget.Pack(
-    buildDir.EnumerateFiles("*.nuspec").GetFullNames(),
-    r => r
+.Do(nuget => {
+    var specFileNames = buildDir.EnumerateFiles("*.nuspec").GetFullNames();
+    var version = getBinaryOutputFolder().File("Wharrgarbl.dll").GetAssemblyName().Version.ConvertToSemVer(getVersionSuffix());
+    nuget.Pack(specFileNames, r => r
         .WithOutputDirectory(nugetOutputDir.FullName)
         .WithProperty("Configuration", buildConfigurationName)
         .WithIncludeReferencedProjects()
         .WithVerbosity(nugetVerbosity)
-        .WithVersion(getVersion() + getVersionSuffix())
-		.WithSymbols()
-))
+        .WithVersion(version)
+		.WithSymbols());
+})
 
 .Task("test").DependsOn("xunit")
 
