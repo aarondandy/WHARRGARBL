@@ -14,16 +14,10 @@ var nugetOutputDir = artifactDir.Subdirectory("nuget");
 var logsDir = artifactDir.Subdirectory("logs");
 var solutionFile = repositoryDir.EnumerateFiles("*.sln").Single();
 
-// parsed variables
-var versionRegex = new Regex(@"^\s*\[assembly:\s*AssemblyVersion(?:Attribute)?\(\""([\d.\*]+)\""\)\]\s*");
-var version = File.ReadAllLines(repositoryDir.Combine("src/Wharrgarbl/Properties/AssemblyInfo.cs"))
-    .Select(line => versionRegex.Match(line))
-    .Single(match => match.Success)
-    .Groups[1].Value.Split('.').Take(3).Join(".");
-
 // helpers
 var getVersionSuffix = fun(() => "Release".EqualsOrdinal(buildConfigurationName, true) ? string.Empty : (GetEnvVar("VERSION_SUFFIX") ?? "-adhoc"));
 var getBinaryOutputFolder = fun(() => artifactDir.Subdirectory("bin", buildConfigurationName));
+var getVersion = fun(() => System.Reflection.AssemblyName.GetAssemblyName(getBinaryOutputFolder().File("Wharrgarbl.dll").FullName).Version.ToString().Split('.').Take(3).Join("."));
 
 // tasks
 Require<Bau>()
@@ -63,7 +57,7 @@ Require<Bau>()
         .WithProperty("Configuration", buildConfigurationName)
         .WithIncludeReferencedProjects()
         .WithVerbosity(nugetVerbosity)
-        .WithVersion(version + getVersionSuffix())
+        .WithVersion(getVersion() + getVersionSuffix())
 		.WithSymbols()
 ))
 
