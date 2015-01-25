@@ -7,13 +7,16 @@
     using System.Threading.Tasks;
     using ScriptCs.Contracts;
 
+    /// <inheritdoc/>
     public class WharrgarblScriptPack : IScriptPack
     {
+        /// <inheritdoc/>
         public IScriptPackContext GetContext()
         {
             return new WharrgarblScriptPackContext();
         }
 
+        /// <inheritdoc/>
         public void Initialize(IScriptPackSession session)
         {
             var namespaceUsings = new[]
@@ -33,6 +36,7 @@
             }
         }
 
+        /// <inheritdoc/>
         public void Terminate()
         {
         }

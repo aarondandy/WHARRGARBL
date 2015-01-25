@@ -8,6 +8,9 @@
     using System.Threading;
     using System.Threading.Tasks;
 
+    /// <summary>
+    /// Extension methods related to the <see cref="N:System.IO">System.IO namespace</see>.
+    /// </summary>
     public static class IOEx
     {
         public static DirectoryInfo ToDirectoryInfo(this string path)

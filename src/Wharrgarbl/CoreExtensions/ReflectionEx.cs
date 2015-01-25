@@ -9,6 +9,9 @@
     using System.Text;
     using System.Threading.Tasks;
 
+    /// <summary>
+    /// Extension methods related to reflection.
+    /// </summary>
     public static class ReflectionEx
     {
         public static AssemblyName GetAssemblyName(this FileInfo file)

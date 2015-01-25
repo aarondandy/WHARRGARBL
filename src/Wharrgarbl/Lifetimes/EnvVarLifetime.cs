@@ -7,6 +7,9 @@
     using System.Text;
     using System.Threading.Tasks;
 
+    /// <summary>
+    /// A scoped environment variable lifetime implementing the <see cref="System.IDisposable">IDisposable</see> pattern.
+    /// </summary>
     public class EnvVarLifetime : IDisposable
     {
         private EnvVarLifetime(string variable, string newValue, string originalValue, EnvironmentVariableTarget target) 

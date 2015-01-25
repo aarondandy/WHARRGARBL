@@ -7,6 +7,10 @@
     using System.Threading.Tasks;
     using ScriptCs.Contracts;
 
+    /// <inheritdoc/>
+    /// <remarks>
+    /// I have no idea what I am doing.
+    /// </remarks>
     public class WharrgarblScriptPackContext : IScriptPackContext
     {
     }

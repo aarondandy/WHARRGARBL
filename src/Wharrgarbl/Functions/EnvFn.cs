@@ -7,6 +7,9 @@
     using System.Text;
     using System.Threading.Tasks;
 
+    /// <summary>
+    /// Various functions for the system environment designed for the using static feature.
+    /// </summary>
     public static class EnvFn
     {
         public static string GetEnvVar(string variable)
